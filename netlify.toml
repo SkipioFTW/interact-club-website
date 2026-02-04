@@ -1,0 +1,24 @@
+# Netlify Deployment Configuration
+# This file tells Netlify how to build and deploy your site
+
+[build]
+  # Directory to publish (the build output)
+  publish = "dist"
+  
+  # Build command
+  command = "npm run build"
+
+# Redirect rules for single-page application
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
