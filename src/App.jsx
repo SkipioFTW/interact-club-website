@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ScrollManager from './components/ScrollManager';
 import Hero from './sections/Hero';
 import About from './sections/About';
 import Events from './sections/Events';
@@ -12,6 +13,7 @@ import './index.css';
 function App() {
     return (
         <div className="App">
+            <ScrollManager />
             <Navbar />
             <main>
                 <Hero />

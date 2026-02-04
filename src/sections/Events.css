@@ -22,10 +22,8 @@
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-md);
-    transition: all var(--transition-base);
+    transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
     border: 2px solid transparent;
-    opacity: 0;
-    animation-fill-mode: forwards;
 }
 
 .event-card:hover {

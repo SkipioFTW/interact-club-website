@@ -22,12 +22,14 @@
 .benefit-item {
     display: flex;
     gap: var(--spacing-md);
-    background: white;
+    background: var(--color-bg);
     padding: var(--spacing-md);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-sm);
     transition: all var(--transition-base);
     border-left: 4px solid var(--color-accent);
+    border: 1px solid var(--color-border);
+    border-left-width: 4px;
 }
 
 .benefit-item:hover {
@@ -46,6 +48,10 @@
     font-size: 1.1rem;
 }
 
+[data-theme='dark'] .benefit-item h4 {
+    color: var(--color-heading);
+}
+
 .benefit-item p {
     color: var(--color-text-secondary);
     margin: 0;
@@ -54,10 +60,11 @@
 }
 
 .join-form {
-    background: white;
+    background: var(--color-bg);
     padding: var(--spacing-xl);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-border);
 }
 
 .join-form h3 {

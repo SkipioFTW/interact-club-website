@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { events, getCurrentEvents, getPastEvents } from '../data/events';
 import './Events.css';
 
@@ -6,8 +8,38 @@ const Events = () => {
     const currentEvents = getCurrentEvents();
     const pastEvents = getPastEvents();
 
+    const sectionRef = useRef(null);
+    const eventCardsRef = useRef([]);
+
+    useEffect(() => {
+        const section = sectionRef.current;
+        const cards = eventCardsRef.current;
+
+        if (!section || cards.length === 0) return;
+
+        const ctx = gsap.context(() => {
+            // Batch animate all event cards as they enter view
+            ScrollTrigger.batch(cards, {
+                onEnter: batch => gsap.fromTo(batch,
+                    { y: 60, opacity: 0, scale: 0.9 },
+                    { y: 0, opacity: 1, scale: 1, stagger: 0.15, duration: 0.8, ease: "power2.out", overwrite: true }
+                ),
+                start: "top 85%",
+            });
+        }, section);
+
+        return () => ctx.revert();
+    }, []);
+
+    // Helper to add refs
+    const addToRefs = (el) => {
+        if (el && !eventCardsRef.current.includes(el)) {
+            eventCardsRef.current.push(el);
+        }
+    };
+
     return (
-        <section id="events" className="section bg-secondary">
+        <section id="events" className="section bg-secondary" ref={sectionRef}>
             <div className="container">
                 <h2 className="section-title">Nos Événements</h2>
 
@@ -17,7 +49,7 @@ const Events = () => {
                         <h3 className="events-section-title">Événements en Cours</h3>
                         <div className="events-grid">
                             {currentEvents.map((event) => (
-                                <div key={event.id} className="event-card event-card-current">
+                                <div key={event.id} className="event-card event-card-current" ref={addToRefs}>
                                     <div className="event-badge">En Cours</div>
                                     <div className="event-image-wrapper">
                                         <img
@@ -25,7 +57,7 @@ const Events = () => {
                                             alt={event.title}
                                             className="event-image"
                                             onError={(e) => {
-                                                e.target.src = 'https://via.placeholder.com/600x400/1A4D8F/FFFFFF?text=Event';
+                                                e.target.src = '/placeholder-premium.svg';
                                             }}
                                         />
                                     </div>
@@ -56,11 +88,11 @@ const Events = () => {
                     <div className="past-events">
                         <h3 className="events-section-title">Événements Passés</h3>
                         <div className="events-grid">
-                            {pastEvents.map((event, index) => (
+                            {pastEvents.map((event) => (
                                 <div
                                     key={event.id}
-                                    className="event-card animate-fade-in-up"
-                                    style={{ animationDelay: `${index * 0.1}s` }}
+                                    className="event-card"
+                                    ref={addToRefs}
                                 >
                                     <div className="event-image-wrapper">
                                         <img
@@ -68,7 +100,7 @@ const Events = () => {
                                             alt={event.title}
                                             className="event-image"
                                             onError={(e) => {
-                                                e.target.src = 'https://via.placeholder.com/600x400/1A4D8F/FFFFFF?text=Event';
+                                                e.target.src = '/placeholder-premium.svg';
                                             }}
                                         />
                                     </div>
