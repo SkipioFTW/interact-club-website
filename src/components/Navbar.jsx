@@ -4,7 +4,14 @@ import './Navbar.css';
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+
+    // Validate theme from localStorage
+    const getInitialTheme = () => {
+        const stored = localStorage.getItem('theme');
+        return (stored === 'light' || stored === 'dark') ? stored : 'light';
+    };
+
+    const [theme, setTheme] = useState(getInitialTheme);
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', theme);

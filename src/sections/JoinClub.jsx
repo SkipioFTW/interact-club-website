@@ -23,6 +23,27 @@ const JoinClub = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Spam Protection: simple honeypot check
+        if (formData.interest_hp) {
+            // Silent failure for bots
+            setStatus({
+                type: 'error',
+                message: 'Erreur de validation.'
+            });
+            return;
+        }
+
+        // Basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+            setStatus({
+                type: 'error',
+                message: 'Veuillez entrer une adresse email valide.'
+            });
+            return;
+        }
+
         setIsSubmitting(true);
         setStatus({ type: '', message: '' });
 
@@ -96,6 +117,20 @@ const JoinClub = () => {
 
                     <form ref={formRef} onSubmit={handleSubmit} className="join-form">
                         <h3>Formulaire d'Inscription</h3>
+
+                        {/* Honeypot field - invisible to humans */}
+                        <div className="form-group-hp" style={{ position: 'absolute', left: '-9999px' }} aria-hidden="true">
+                            <label htmlFor="interest_hp">Interest Check</label>
+                            <input
+                                type="text"
+                                id="interest_hp"
+                                name="interest_hp"
+                                tabIndex="-1"
+                                autoComplete="off"
+                                value={formData.interest_hp || ''}
+                                onChange={handleChange}
+                            />
+                        </div>
 
                         <div className="form-group">
                             <label htmlFor="join-name" className="form-label">Nom Complet *</label>

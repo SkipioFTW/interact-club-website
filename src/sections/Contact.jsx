@@ -23,6 +23,27 @@ const Contact = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Spam Protection: simple honeypot check
+        if (formData.website_hp) {
+            // Silent failure for bots: pretend it worked but do nothing
+            setStatus({
+                type: 'error',
+                message: 'Erreur de validation.'
+            });
+            return;
+        }
+
+        // Basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+            setStatus({
+                type: 'error',
+                message: 'Veuillez entrer une adresse email valide.'
+            });
+            return;
+        }
+
         setIsSubmitting(true);
         setStatus({ type: '', message: '' });
 
@@ -85,6 +106,20 @@ const Contact = () => {
                     </div>
 
                     <form ref={formRef} onSubmit={handleSubmit} className="contact-form">
+                        {/* Honeypot field - invisible to humans */}
+                        <div className="form-group-hp" style={{ position: 'absolute', left: '-9999px' }} aria-hidden="true">
+                            <label htmlFor="website_hp">Website</label>
+                            <input
+                                type="text"
+                                id="website_hp"
+                                name="website_hp"
+                                tabIndex="-1"
+                                autoComplete="off"
+                                value={formData.website_hp || ''}
+                                onChange={handleChange}
+                            />
+                        </div>
+
                         <div className="form-group">
                             <label htmlFor="name" className="form-label">Nom Complet *</label>
                             <input
